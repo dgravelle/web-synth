@@ -61,18 +61,18 @@
     clear: both;
 }
 
-
-div#keyboard {
-    /* overflow: visible; */
-}
-
-input[name="asdr"], input[name="osc-type"] {
-    display: block;
-}
-
 section#oscType {
     float: left;
     border: 1px solid #ddd;
+}
+
+section#oscType label {
+  display: block;
+}
+
+section#oscType input[name="osc-type"] {
+  margin-right: 8px;
+  margin-bottom: 21px;
 }
 
 section#asdr {
@@ -81,6 +81,17 @@ section#asdr {
     float: left;
 }
 
+input[name="asdr"] {
+    display: block;
+}
+
+
+section#synthControls {
+  margin-left: 10%;
+  overflow: auto;
+}
+
 section#synthControls section {
     padding: 8px;
+    padding-bottom: 8px;
 }
