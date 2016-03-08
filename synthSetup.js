@@ -6,15 +6,18 @@ var Synth = (function() {
   var oscType;
 
   var Synth = function(type) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    gainNode = audioCtx.createGain();
-    osc = audioCtx.createOscillator();
     keyboard = document.getElementById('keyboard');
+    waveControls = document.getElementById('oscType');
 
-    gainNode.connect(audioCtx.destination);
-    osc.connect(gainNode);
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    gainNode = audioCtx.createGain();
     gainNode.gain.value = 0;
+    gainNode.connect(audioCtx.destination);
+
+    osc = audioCtx.createOscillator();
     osc.start(0);
+    osc.connect(gainNode);
 
     Synth.startListening();
   };
@@ -22,6 +25,8 @@ var Synth = (function() {
   Synth.startListening = function() {
     keyboard.addEventListener('mousedown', Synth.playSound);
     keyboard.addEventListener('mouseup',  Synth.stopSound);
+
+    waveControls.addEventListener('change', Synth.updateWave);
   };
 
   Synth.playSound = function(event) {
@@ -32,6 +37,11 @@ var Synth = (function() {
   Synth.stopSound = function() {
     gainNode.gain.value = 0;
   };
+
+  Synth.updateWave = function(event) {
+    console.log(event);
+    osc.type = event.target.id;
+  }
 
   return Synth;
 })();

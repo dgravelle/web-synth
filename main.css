@@ -54,17 +54,33 @@
 }
 
 #keyboard {
-    /* overflow: hidden; */
-    /* display: block; */
     position: relative;
-    margin: 0 auto;
+    margin: 16px auto;
     width: 80%;
-    /* left: auto; */
-    /* right: auto; */
     height: 220px;
+    clear: both;
 }
 
 
 div#keyboard {
     /* overflow: visible; */
+}
+
+input[name="asdr"], input[name="osc-type"] {
+    display: block;
+}
+
+section#oscType {
+    float: left;
+    border: 1px solid #ddd;
+}
+
+section#asdr {
+    border: 1px solid #ddd;
+    display: block;
+    float: left;
+}
+
+section#synthControls section {
+    padding: 8px;
 }

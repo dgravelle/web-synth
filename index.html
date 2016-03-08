@@ -12,7 +12,7 @@
    <h1>Welcome</h1>
   </header>
   <section id="synthControls">
-   <div class="osc-type">
+   <section id="oscType">
      <label for="sine">
        <input name="osc-type" id="sine" type="radio" />Sine
      </label>
@@ -25,7 +25,21 @@
      <label for="triangle">
        <input name="osc-type" id="triangle" type="radio" />Triangle
      </label>
-   </div>
+   </section>
+   <section id="asdr">
+     <label for="attack">
+       <input id="attack" type="range" name="asdr">Attack
+     </label>
+     <label for="sustain">
+       <input id="sustain" type="range" name="asdr">Sustain
+     </label>
+     <label for="decay">
+       <input id="range" type="range" name="asdr">Decay
+     </label>
+     <label for="release">
+       <input id="release" type="range" name="asdr">Release
+     </label>
+   </section>
   </section>
   <section id="keyboard">
     <div class="white-keys">
