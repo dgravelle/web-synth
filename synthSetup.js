@@ -1,9 +1,3 @@
-// Goal: produce a sine wave based on user's input
-
-// var C = document.getElementById('C');
-// var D = document.getElementById('D');
-// var stopBtn = document.getElementById('stopSynth');
-
 var Synth = (function() {
   var audioCtx;
   var gainNode;
