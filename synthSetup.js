@@ -13,7 +13,7 @@ var Synth = (function() {
     asdrControls = document.getElementById('asdr');
 
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    now = audioCtx.currentTime;
+
 
     gainNode = audioCtx.createGain();
     gainNode.gain.value = 1;
@@ -42,20 +42,19 @@ var Synth = (function() {
   Synth.playSound = function(event) {
     osc.frequency.value = Number(event.target.attributes.value.nodeValue);
     var attack = asdrControls.querySelector('#attack');
+    now = audioCtx.currentTime;
 
-
-    console.log(asdrGain.gain.value);
-    console.log(now);
-    asdrGain.gain.cancelScheduledValues(now)
+    asdrGain.gain.cancelScheduledValues(now);
     asdrGain.gain.setValueAtTime(0, now);
-    asdrGain.gain.exponentialRampToValueAtTime(0.5, now + 1);
+    asdrGain.gain.linearRampToValueAtTime(0.5, now + (attack.value / 50));
   };
 
   Synth.stopSound = function() {
+    now = audioCtx.currentTime;
+    var release = asdrControls.querySelector('#release').value;
 
-    asdrGain.gain.setValueAtTime(0, now);
-    asdrGain.gain.value = 0;
-    console.log(asdrGain.gain.value);
+    asdrGain.gain.linearRampToValueAtTime(0, now + ( Number(release) / 50 ));
+
   };
 
   Synth.updateWave = function(event) {
@@ -64,7 +63,7 @@ var Synth = (function() {
   };
 
   Synth.updateASDR = function(event) {
-    asdrGain.gain.value = Number(event.target.value);
+
     console.log(event);
   };
 
