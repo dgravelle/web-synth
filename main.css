@@ -1,0 +1,70 @@
+* { box-sizing: border-box; }
+
+.white-key {
+  height: 100%;
+  background: white;
+  border: 1px solid #eee;
+  display: inline-block;
+  width: calc(100% / 7);
+  position: relative;
+  float: left;
+}
+
+.black-key {
+  height: 140px;
+  background: black;
+  display: inline-block;
+  width: 8%;
+  overflow: hidden;
+  float: left;
+  position: relative;
+  left: 10.5%;
+}
+
+
+.white-keys {
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+    float: left;
+    height: 220px;
+}
+
+.black-keys {
+    width: 100%;
+    z-index: 2;
+}
+
+.black-key:active {
+  background: #333;
+}
+.white-key:active {
+  background: #eee;
+}
+
+#Csharp {
+}
+
+#Dsharp, #Gsharp, #Asharp  {
+    margin-left: 5.5%;
+}
+
+#Fsharp {
+    margin-left: 20%;
+}
+
+#keyboard {
+    /* overflow: hidden; */
+    /* display: block; */
+    position: relative;
+    margin: 0 auto;
+    width: 80%;
+    /* left: auto; */
+    /* right: auto; */
+    height: 220px;
+}
+
+
+div#keyboard {
+    /* overflow: visible; */
+}
