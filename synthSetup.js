@@ -4,8 +4,10 @@ var Synth = (function() {
   var master;
   var vca;
   var oscType;
-  var LFO;
-  var LFOGain;
+  var lfo;
+  var lfoGain;
+  var lfoInput;
+  var lfoInputVal;
   var now;
 
   // Envelope
@@ -21,7 +23,19 @@ var Synth = (function() {
 
   var Synth = function(type) {
     waveControls = document.getElementById('oscType');
-    asdrControls = document.getElementById('asdr');
+
+    attackSlider = document.querySelector('#attack');
+    sustainSlider = document.querySelector('#sustain');
+    decaySlider = document.querySelector('#decay');
+    releaseSlider = document.querySelector('#release');
+
+    attackVal = Number(attack.value) / 100;
+    sustainVal = Number(sustain.value) / 100;
+    releaseVal = Number(release.value) / 100;
+    decayVal = Number(decay.value) / 100;
+
+    lfoInput = document.querySelector('#lfo');
+    lfoInputVal = Number(lfoInput.value);
 
     master = audioCtx.createGain();
     master.gain.value = 1;
@@ -38,22 +52,11 @@ var Synth = (function() {
     vco.start(0);
     vco.connect(vca);
 
-    LFO = audioCtx.createOscillator();
-    LFO.connect(vca.gain);
+    lfo = audioCtx.createOscillator();
+    lfo.connect(vca.gain);
 
-    LFO.frequency.value = 2;
-    LFO.start();
-
-    attackSlider = asdrControls.querySelector('#attack');
-    sustainSlider = asdrControls.querySelector('#sustain');
-    decaySlider = asdrControls.querySelector('#decay');
-    releaseSlider = asdrControls.querySelector('#release');
-
-    attackVal = Number(attack.value) / 50;
-    sustainVal = Number(sustain.value) / 50;
-    releaseVal = Number(release.value) / 50;
-    decayVal = Number(decay.value) / 50;
-
+    lfo.frequency.value = lfoInputVal;
+    lfo.start(0);
 
     Synth.startListening();
   };
@@ -61,7 +64,6 @@ var Synth = (function() {
   Synth.startListening = function() {
     keyboard.addEventListener('mousedown', Synth.playSound);
     keyboard.addEventListener('mouseup',  Synth.stopSound);
-    // keyboard.addEventListener('mouseleave',  Synth.stopSound);
 
     waveControls.addEventListener('change', Synth.updateWave);
 
@@ -69,21 +71,22 @@ var Synth = (function() {
     sustain.addEventListener('change', Synth.updateSustain);
     decay.addEventListener('change', Synth.updateDecay);
     release.addEventListener('change', Synth.updateRelease);
+
+    lfoInput.addEventListener('change', Synth.updateLfo);
   };
 
   Synth.playSound = function(event) {
-
     now = audioCtx.currentTime;
     vco.frequency.cancelScheduledValues(now);
     vco.frequency.setValueAtTime(Number(event.target.attributes.value.nodeValue), now);
     console.log('play', asdrGain.gain.value);
-    Synth.envelopeOn(now);
+    Synth.envelopeOn();
   };
 
   Synth.stopSound = function() {
     console.log(asdrGain.gain.value);
     now = audioCtx.currentTime;
-    Synth.envelopeOff(now);
+    Synth.envelopeOff();
   };
 
   Synth.updateWave = function(event) {
@@ -101,24 +104,31 @@ var Synth = (function() {
 
   Synth.envelopeOff = function() {
     now = audioCtx.currentTime;
-    console.log('off ', asdrGain.gain.value);
+    console.log('release ',releaseVal);
+    // console.log('off ', asdrGain.gain.value);
     asdrGain.gain.cancelScheduledValues(now);
     asdrGain.gain.setValueAtTime(asdrGain.gain.value, now);
-    asdrGain.gain.exponentialRampToValueAtTime(0.00000001, now + releaseVal);
+    asdrGain.gain.linearRampToValueAtTime(0.00000001, now + releaseVal);
   };
 
   Synth.updateAttack = function() {
-    attackVal = Number(event.target.value) / 50;
+    attackVal = Number(event.target.value) / 100;
   };
   Synth.updateSustain = function() {
-    sustainVal = Number(event.target.value) / 50;
+    sustainVal = Number(event.target.value) / 100;
   };
   Synth.updateDecay = function() {
-    decayVal = Number(event.target.value) / 50;
+    decayVal = Number(event.target.value) / 100;
   };
   Synth.updateRelease = function() {
-    releaseVal = Number(event.target.value) / 50;
+    releaseVal = Number(event.target.value) / 100;
   };
+
+   Synth.updateLfo = function() {
+     lfoInputVal = Number(event.target.value);
+     lfo.frequency.value = lfoInputVal;
+     console.log(lfoInputVal);
+   };
 
   return Synth;
 })();
