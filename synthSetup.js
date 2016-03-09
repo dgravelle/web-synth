@@ -1,19 +1,25 @@
 var Synth = (function() {
-  var audioCtx;
+  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  var keyboard = document.getElementById('keyboard');
   var gainNode;
   var osc;
-  var keyboard;
   var oscType;
-  var asdrGain;
   var now;
 
+  // Envelope
+  var asdrGain;
+  var attackSlider;
+  var sustainSlider;
+  var decaySlider;
+  var releaseSlider;
+  var attackVal;
+  var sustainVal;
+  var releaseVal;
+  var decayVal;
+
   var Synth = function(type) {
-    keyboard = document.getElementById('keyboard');
     waveControls = document.getElementById('oscType');
     asdrControls = document.getElementById('asdr');
-
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
 
     gainNode = audioCtx.createGain();
     gainNode.gain.value = 1;
@@ -27,6 +33,17 @@ var Synth = (function() {
     osc.start(0);
     osc.connect(asdrGain);
 
+    attackSlider = asdrControls.querySelector('#attack');
+    sustainSlider = asdrControls.querySelector('#sustain');
+    decaySlider = asdrControls.querySelector('#decay');
+    releaseSlider = asdrControls.querySelector('#release');
+
+    attackVal = Number(attack.value) / 100;
+    sustainVal = Number(sustain.value) / 100;
+    releaseVal = Number(release.value) / 100;
+    decayVal = Number(decay.value) / 100;
+
+
     Synth.startListening();
   };
 
@@ -36,25 +53,25 @@ var Synth = (function() {
     keyboard.addEventListener('mouseleave',  Synth.stopSound);
 
     waveControls.addEventListener('change', Synth.updateWave);
-    asdrControls.addEventListener('change', Synth.updateASDR);
+    // asdrControls.addEventListener('change', Synth.updateASDR);
+    attack.addEventListener('change', Synth.updateAttack);
+    sustain.addEventListener('change', Synth.updateSustain);
+    decay.addEventListener('change', Synth.updateDecay);
+    release.addEventListener('change', Synth.updateRelease);
   };
 
   Synth.playSound = function(event) {
-    osc.frequency.value = Number(event.target.attributes.value.nodeValue);
-    var attack = asdrControls.querySelector('#attack');
-    now = audioCtx.currentTime;
 
-    asdrGain.gain.cancelScheduledValues(now);
-    asdrGain.gain.setValueAtTime(0, now);
-    asdrGain.gain.linearRampToValueAtTime(0.5, now + (attack.value / 50));
+    now = audioCtx.currentTime;
+    osc.frequency.cancelScheduledValues(now);
+    osc.frequency.setValueAtTime(Number(event.target.attributes.value.nodeValue), now);
+
+    Synth.envelopeOn(now);
   };
 
   Synth.stopSound = function() {
     now = audioCtx.currentTime;
-    var release = asdrControls.querySelector('#release').value;
-
-    asdrGain.gain.linearRampToValueAtTime(0, now + ( Number(release) / 50 ));
-
+    Synth.envelopeOff(now);
   };
 
   Synth.updateWave = function(event) {
@@ -62,9 +79,36 @@ var Synth = (function() {
     osc.type = event.target.id;
   };
 
-  Synth.updateASDR = function(event) {
+  Synth.envelopeOn = function(now) {
+    console.log(attackVal);
 
-    console.log(event);
+    asdrGain.gain.cancelScheduledValues(now);
+    asdrGain.gain.setValueAtTime(0, now);
+    asdrGain.gain.linearRampToValueAtTime(1, now + attackVal);
+    asdrGain.gain.linearRampToValueAtTime(sustainVal, now + attackVal + decayVal);
+  };
+
+  Synth.envelopeOff = function(now) {
+    asdrGain.gain.linearRampToValueAtTime(0, now + releaseVal);
+  };
+
+  // Synth.updateASDR = function(event) {
+  //   console.log(event);
+  // };
+
+  Synth.updateAttack = function() {
+    attackVal = Number(event.target.value) / 100;
+    console.log(attackVal);
+  };
+  Synth.updateSustain = function() {
+    sustainVal = Number(event.target.value) / 100;
+  };
+  Synth.updateDecay = function() {
+    decayVal = Number(event.target.value) / 100;
+  };
+  Synth.updateRelease = function() {
+    releaseVal = Number(event.target.value) / 100;
+    console.log(releaseVal);
   };
 
   return Synth;
