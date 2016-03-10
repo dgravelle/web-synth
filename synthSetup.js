@@ -5,11 +5,12 @@ var Synth = (function() {
   var masterVolumeSlider;
   var vca;
   var oscType;
-  var lfo;
-  var lfoGain;
-  var lfoInput;
-  var lfoInputVal;
+  var ampMod;
+  var ampModGain;
+  var ampModInput;
+  var ampModInputVal;
   var now;
+  var synthSettings;
 
   // Envelope
   var asdrGain;
@@ -35,8 +36,8 @@ var Synth = (function() {
     releaseVal = Number(release.value) / 100;
     decayVal = Number(decay.value) / 100;
 
-    lfoInput = document.querySelector('#lfo');
-    lfoInputVal = Number(lfoInput.value);
+    ampModInput = document.querySelector('#ampMod');
+    ampModInputVal = Number(ampModInput.value);
 
     master = audioCtx.createGain();
     master.gain.value = 1;
@@ -53,11 +54,11 @@ var Synth = (function() {
     vco.start(0);
     vco.connect(vca);
 
-    lfo = audioCtx.createOscillator();
-    lfo.connect(vca.gain);
+    ampMod = audioCtx.createOscillator();
+    ampMod.connect(vca.gain);
 
-    lfo.frequency.value = lfoInputVal;
-    lfo.start(0);
+    ampMod.frequency.value = ampModInputVal;
+    ampMod.start(0);
 
     masterVolumeSlider = document.getElementById('masterVolume');
 
@@ -75,7 +76,7 @@ var Synth = (function() {
     decay.addEventListener('change', Synth.updateDecay);
     release.addEventListener('change', Synth.updateRelease);
     // amp mod slider
-    lfoInput.addEventListener('change', Synth.updateLfo);
+    ampModInput.addEventListener('change', Synth.updateAmpMod);
     // master volume slider
     masterVolumeSlider.addEventListener('change', Synth.updateMasterVolume);
   };
@@ -128,18 +129,34 @@ var Synth = (function() {
     releaseVal = Number(event.target.value) / 100;
   };
 
-  Synth.updateLfo = function() {
-    lfoInputVal = Number(event.target.value);
-    lfo.frequency.value = lfoInputVal;
+  Synth.updateAmpMod = function() {
+    ampModInputVal = Number(event.target.value);
+    ampMod.frequency.value = ampModInputVal;
   };
 
   Synth.updateMasterVolume = function() {
     master.gain.value = Number(event.target.value) / 100;
   };
 
+  Synth.getSettings = function() {
+    return {
+      wave    : vco.type,
+      attack  : attackVal,
+      sustain : sustainVal,
+      decay   : decayVal,
+      release : releaseVal,
+      ampMod  : ampModInputVal
+    }
+  }
+
   return Synth;
 })();
 
 window.onload = function() {
   var synth = new Synth();
+  var saveBtn = document.getElementById('saveBtn');
+
+  saveBtn.addEventListener('click', function() {
+    console.log(Synth.getSettings());
+  });
 };

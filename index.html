@@ -52,14 +52,14 @@
    </section>
    <section id="modulation">
      <div class="form-group">
-       <input id="lfo" type="range" name="modulation" orient="vertical" value="1" min="1" max="20"/>
-       <label for="lfo">Amp <br> mod</label>
+       <input id="ampMod" type="range" name="modulation" orient="vertical" value="1" min="1" max="20"/>
+       <label for="ampMod">Amp<br>mod</label>
      </div>
    </section>
    <section id="master">
      <div class="form-group">
        <input id="masterVolume" type="range" name="modulation" orient="vertical" value="100"/>
-       <label for="masterVolume">Master<br> Volume</label>
+       <label for="masterVolume">Master<br>Volume</label>
      </div>
    </section>
   </section>
@@ -81,7 +81,9 @@
       <span id="Asharp" class="black-key" value="466.2"></div>
     </div>
   </section>
-
+  <section id="saveSettings">
+    <button id="saveBtn" class="btn btn--save">Save Settings</button>
+  </section>
   <script src="synthSetup.js"></script>
 </body>
 </html>
