@@ -1,9 +1,16 @@
-* { box-sizing: border-box; }
- 
+* {
+  box-sizing: border-box;
+  font-family: 'Helvetica', sans;
+}
+
+body {
+  background-color: #efefef;
+}
+
 .white-key {
   height: 100%;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   display: inline-block;
   width: calc(100% / 7);
   position: relative;
@@ -56,13 +63,8 @@
 #keyboard {
     position: relative;
     margin: 16px auto;
-    width: 535px;
+    width: 529px;
     height: 220px;
-}
-
-
-section#oscType label {
-  display: block;
 }
 
 section#oscType input[name="osc-type"] {
@@ -75,20 +77,12 @@ section#asdr {
     display: block;
 }
 
-input[orient="vertical"] {
-    -webkit-appearance: slider-vertical;
-    -moz-appearance: slider-vertical;
-    appearance: slider-vertical;
-    height: 100px;
-    width: 40px;
-}
-
 section#synthControls {
   margin: 0 auto;
-  height: 160px;
+  height: 200px;
   display: block;
   position: relative;
-  width: 535px;
+  width: 533px;
 }
 
 section#synthControls section {
@@ -101,28 +95,41 @@ section#synthControls section {
     display: inline-block;
 }
 
-section#synthControls label:not(#oscType)  {
-    display: block;
-    position: relative;
+section#synthControls section:not(#oscType) .form-group  {
+    text-align: center;
 }
-
 
 section#synthControls section {
     height: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 7px;
+    border: 2px solid #ccc;
     border-left: none;
     margin: 0;
     position: relative;
     display: inline-block;
     float: left;
+    background: #ddd;
+    color: white;
 }
 
 section#synthControls section:first-child {
-    border-left: 1px solid #ccc;
+    border-left: 2px solid #ccc;
 }
 
+input[type=range]{
+  -webkit-appearance: slider-vertical;
+  width: 56px;
+  display: block;
+  margin-bottom: 8px;
+}
 
 .form-group {
     position: relative;
+}
+.form-group label {
+    color: #555;
+    /* text-shadow: 1px 1px 2px rgba(0,0,0,0.2); */
+}
+#synthControls section label div.form-group {
+    text-align: center;
 }

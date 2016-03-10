@@ -82,7 +82,7 @@ var Synth = (function() {
 
   Synth.playSound = function(event) {
     now = audioCtx.currentTime;
-    
+
     vco.frequency.cancelScheduledValues(now);
     vco.frequency.setValueAtTime(Number(event.target.attributes.value.nodeValue), now);
 
@@ -105,7 +105,6 @@ var Synth = (function() {
     asdrGain.gain.setValueAtTime(0.01, now);
     asdrGain.gain.exponentialRampToValueAtTime(1, now + attackVal);
     asdrGain.gain.exponentialRampToValueAtTime(sustainVal, now + attackVal + decayVal);
-
   };
 
   Synth.envelopeOff = function() {
@@ -136,7 +135,7 @@ var Synth = (function() {
 
   Synth.updateMasterVolume = function() {
     master.gain.value = Number(event.target.value) / 100;
-  }
+  };
 
   return Synth;
 })();
