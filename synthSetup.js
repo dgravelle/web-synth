@@ -2,6 +2,7 @@ var Synth = (function() {
   var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   var keyboard = document.getElementById('keyboard');
   var master;
+  var masterVolumeSlider;
   var vca;
   var oscType;
   var lfo;
@@ -58,33 +59,37 @@ var Synth = (function() {
     lfo.frequency.value = lfoInputVal;
     lfo.start(0);
 
+    masterVolumeSlider = document.getElementById('masterVolume');
+
     Synth.startListening();
   };
 
   Synth.startListening = function() {
     keyboard.addEventListener('mousedown', Synth.playSound);
     keyboard.addEventListener('mouseup',  Synth.stopSound);
-
+    // wave type selection
     waveControls.addEventListener('change', Synth.updateWave);
-
+    // envelope sliders
     attack.addEventListener('change', Synth.updateAttack);
     sustain.addEventListener('change', Synth.updateSustain);
     decay.addEventListener('change', Synth.updateDecay);
     release.addEventListener('change', Synth.updateRelease);
-
+    // amp mod slider
     lfoInput.addEventListener('change', Synth.updateLfo);
+    // master volume slider
+    masterVolumeSlider.addEventListener('change', Synth.updateMasterVolume);
   };
 
   Synth.playSound = function(event) {
     now = audioCtx.currentTime;
+    
     vco.frequency.cancelScheduledValues(now);
     vco.frequency.setValueAtTime(Number(event.target.attributes.value.nodeValue), now);
-    console.log('play', asdrGain.gain.value);
+
     Synth.envelopeOn();
   };
 
   Synth.stopSound = function() {
-    console.log(asdrGain.gain.value);
     now = audioCtx.currentTime;
     Synth.envelopeOff();
   };
@@ -95,17 +100,17 @@ var Synth = (function() {
 
   Synth.envelopeOn = function() {
     now = audioCtx.currentTime;
+
     asdrGain.gain.cancelScheduledValues(now);
     asdrGain.gain.setValueAtTime(0.01, now);
     asdrGain.gain.exponentialRampToValueAtTime(1, now + attackVal);
     asdrGain.gain.exponentialRampToValueAtTime(sustainVal, now + attackVal + decayVal);
-    console.log('on ', asdrGain.gain.value);
+
   };
 
   Synth.envelopeOff = function() {
     now = audioCtx.currentTime;
-    console.log('release ',releaseVal);
-    // console.log('off ', asdrGain.gain.value);
+
     asdrGain.gain.cancelScheduledValues(now);
     asdrGain.gain.setValueAtTime(asdrGain.gain.value, now);
     asdrGain.gain.linearRampToValueAtTime(0.00000001, now + releaseVal);
@@ -124,11 +129,14 @@ var Synth = (function() {
     releaseVal = Number(event.target.value) / 100;
   };
 
-   Synth.updateLfo = function() {
-     lfoInputVal = Number(event.target.value);
-     lfo.frequency.value = lfoInputVal;
-     console.log(lfoInputVal);
-   };
+  Synth.updateLfo = function() {
+    lfoInputVal = Number(event.target.value);
+    lfo.frequency.value = lfoInputVal;
+  };
+
+  Synth.updateMasterVolume = function() {
+    master.gain.value = Number(event.target.value) / 100;
+  }
 
   return Synth;
 })();

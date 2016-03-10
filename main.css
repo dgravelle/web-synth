@@ -1,9 +1,9 @@
 * { box-sizing: border-box; }
-
+ 
 .white-key {
   height: 100%;
   background: white;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   display: inline-block;
   width: calc(100% / 7);
   position: relative;
@@ -56,15 +56,10 @@
 #keyboard {
     position: relative;
     margin: 16px auto;
-    width: 80%;
+    width: 535px;
     height: 220px;
-    clear: both;
 }
 
-section#oscType {
-    float: left;
-    border: 1px solid #ddd;
-}
 
 section#oscType label {
   display: block;
@@ -78,19 +73,56 @@ section#oscType input[name="osc-type"] {
 section#asdr {
     border: 1px solid #ddd;
     display: block;
-    float: left;
 }
 
-input[name="asdr"] {
-    display: block;
+input[orient="vertical"] {
+    -webkit-appearance: slider-vertical;
+    -moz-appearance: slider-vertical;
+    appearance: slider-vertical;
+    height: 100px;
+    width: 40px;
 }
 
 section#synthControls {
-  margin-left: 10%;
-  overflow: auto;
+  margin: 0 auto;
+  height: 160px;
+  display: block;
+  position: relative;
+  width: 535px;
 }
 
 section#synthControls section {
     padding: 8px;
     padding-bottom: 8px;
+}
+
+
+#asdr .form-group {
+    display: inline-block;
+}
+
+section#synthControls label:not(#oscType)  {
+    display: block;
+    position: relative;
+}
+
+
+section#synthControls section {
+    height: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-left: none;
+    margin: 0;
+    position: relative;
+    display: inline-block;
+    float: left;
+}
+
+section#synthControls section:first-child {
+    border-left: 1px solid #ccc;
+}
+
+
+.form-group {
+    position: relative;
 }
