@@ -1,162 +1,152 @@
-var Synth = (function() {
-  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  var keyboard = document.getElementById('keyboard');
-  var master;
-  var masterVolumeSlider;
-  var vca;
-  var oscType;
-  var ampMod;
-  var ampModGain;
-  var ampModInput;
-  var ampModInputVal;
-  var now;
-  var synthSettings;
+(function(){
+  'use-strict';
 
-  // Envelope
-  var asdrGain;
-  var attackSlider;
-  var sustainSlider;
-  var decaySlider;
-  var releaseSlider;
-  var attackVal;
-  var sustainVal;
-  var releaseVal;
-  var decayVal;
+  var Synth = (function() {
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var keyboard = document.getElementById('keyboard');
+    var master;
+    var masterVolumeSlider;
+    var vca;
+    var oscType;
+    var ampMod;
+    var ampModGain;
+    var ampModInput;
+    var ampModInputVal;
+    var now;
+    var synthSettings;
 
-  var Synth = function(type) {
-    waveControls = document.getElementById('oscType');
+    // Envelope
+    var asdrGain;
+    var attackSlider;
+    var sustainSlider;
+    var decaySlider;
+    var releaseSlider;
+    var attackVal;
+    var sustainVal;
+    var releaseVal;
+    var decayVal;
 
-    attackSlider = document.querySelector('#attack');
-    sustainSlider = document.querySelector('#sustain');
-    decaySlider = document.querySelector('#decay');
-    releaseSlider = document.querySelector('#release');
+    var Synth = function(type) {
+      waveControls = document.getElementById('oscType');
 
-    attackVal = Number(attack.value) / 100;
-    sustainVal = Number(sustain.value) / 100;
-    releaseVal = Number(release.value) / 100;
-    decayVal = Number(decay.value) / 100;
+      attackSlider = document.querySelector('#attack');
+      sustainSlider = document.querySelector('#sustain');
+      decaySlider = document.querySelector('#decay');
+      releaseSlider = document.querySelector('#release');
 
-    ampModInput = document.querySelector('#ampMod');
-    ampModInputVal = Number(ampModInput.value);
+      attackVal = Number(attack.value) / 100;
+      sustainVal = Number(sustain.value) / 100;
+      releaseVal = Number(release.value) / 100;
+      decayVal = Number(decay.value) / 100;
 
-    master = audioCtx.createGain();
-    master.gain.value = 1;
-    master.connect(audioCtx.destination);
+      ampModInput = document.querySelector('#ampMod');
+      ampModInputVal = Number(ampModInput.value);
 
-    asdrGain = audioCtx.createGain();
-    asdrGain.gain.value = 0;
-    asdrGain.connect(master);
+      master = audioCtx.createGain();
+      master.gain.value = 1;
+      master.connect(audioCtx.destination);
 
-    vca = audioCtx.createGain();
-    vca.connect(asdrGain);
+      asdrGain = audioCtx.createGain();
+      asdrGain.gain.value = 0;
+      asdrGain.connect(master);
 
-    vco = audioCtx.createOscillator();
-    vco.start(0);
-    vco.connect(vca);
+      vca = audioCtx.createGain();
+      vca.connect(asdrGain);
 
-    ampMod = audioCtx.createOscillator();
-    ampMod.connect(vca.gain);
+      vco = audioCtx.createOscillator();
+      vco.start(0);
+      vco.connect(vca);
 
-    ampMod.frequency.value = ampModInputVal;
-    ampMod.start(0);
+      ampMod = audioCtx.createOscillator();
+      ampMod.connect(vca.gain);
 
-    masterVolumeSlider = document.getElementById('masterVolume');
+      ampMod.frequency.value = ampModInputVal;
+      ampMod.start(0);
 
-    Synth.startListening();
+      masterVolumeSlider = document.getElementById('masterVolume');
+
+      Synth.startListening();
+    };
+
+    Synth.startListening = function() {
+      keyboard.addEventListener('mousedown', Synth.playSound);
+      keyboard.addEventListener('mouseup',  Synth.stopSound);
+
+      // wave type selection
+      waveControls.addEventListener('change', Synth.updateWave);
+
+      // envelope sliders
+      attack.addEventListener('change', Synth.updateAttack);
+      sustain.addEventListener('change', Synth.updateSustain);
+      decay.addEventListener('change', Synth.updateDecay);
+      release.addEventListener('change', Synth.updateRelease);
+      // amp mod slider
+      ampModInput.addEventListener('change', Synth.updateAmpMod);
+      // master volume slider
+      masterVolumeSlider.addEventListener('change', Synth.updateMasterVolume);
+    };
+
+    Synth.playSound = function(event) {
+      now = audioCtx.currentTime;
+
+      vco.frequency.cancelScheduledValues(now);
+      vco.frequency.setValueAtTime(Number(event.target.attributes.value.nodeValue), now);
+
+      Synth.envelopeOn();
+    };
+
+    Synth.stopSound = function() {
+      now = audioCtx.currentTime;
+      Synth.envelopeOff();
+    };
+
+    Synth.updateWave = function(event) {
+      vco.type = event.target.id;
+    };
+
+    Synth.envelopeOn = function() {
+      now = audioCtx.currentTime;
+
+      asdrGain.gain.cancelScheduledValues(now);
+      asdrGain.gain.setValueAtTime(0.01, now);
+      asdrGain.gain.exponentialRampToValueAtTime(1, now + attackVal);
+      asdrGain.gain.exponentialRampToValueAtTime(sustainVal, now + attackVal + decayVal);
+    };
+
+    Synth.envelopeOff = function() {
+      now = audioCtx.currentTime;
+
+      asdrGain.gain.cancelScheduledValues(now);
+      asdrGain.gain.setValueAtTime(asdrGain.gain.value, now);
+      asdrGain.gain.linearRampToValueAtTime(0.00000001, now + releaseVal);
+    };
+
+    Synth.updateAttack = function() {
+      attackVal = Number(event.target.value) / 100;
+    };
+    Synth.updateSustain = function() {
+      sustainVal = Number(event.target.value) / 100;
+    };
+    Synth.updateDecay = function() {
+      decayVal = Number(event.target.value) / 100;
+    };
+    Synth.updateRelease = function() {
+      releaseVal = Number(event.target.value) / 100;
+    };
+
+    Synth.updateAmpMod = function() {
+      ampModInputVal = Number(event.target.value);
+      ampMod.frequency.value = ampModInputVal;
+    };
+
+    Synth.updateMasterVolume = function() {
+      master.gain.value = Number(event.target.value) / 100;
+    };
+
+    return Synth;
+  })();
+
+  window.onload = function() {
+    var synth = new Synth();
   };
-
-  Synth.startListening = function() {
-    keyboard.addEventListener('mousedown', Synth.playSound);
-    keyboard.addEventListener('mouseup',  Synth.stopSound);
-    // wave type selection
-    waveControls.addEventListener('change', Synth.updateWave);
-    // envelope sliders
-    attack.addEventListener('change', Synth.updateAttack);
-    sustain.addEventListener('change', Synth.updateSustain);
-    decay.addEventListener('change', Synth.updateDecay);
-    release.addEventListener('change', Synth.updateRelease);
-    // amp mod slider
-    ampModInput.addEventListener('change', Synth.updateAmpMod);
-    // master volume slider
-    masterVolumeSlider.addEventListener('change', Synth.updateMasterVolume);
-  };
-
-  Synth.playSound = function(event) {
-    now = audioCtx.currentTime;
-
-    vco.frequency.cancelScheduledValues(now);
-    vco.frequency.setValueAtTime(Number(event.target.attributes.value.nodeValue), now);
-
-    Synth.envelopeOn();
-  };
-
-  Synth.stopSound = function() {
-    now = audioCtx.currentTime;
-    Synth.envelopeOff();
-  };
-
-  Synth.updateWave = function(event) {
-    vco.type = event.target.id;
-  };
-
-  Synth.envelopeOn = function() {
-    now = audioCtx.currentTime;
-
-    asdrGain.gain.cancelScheduledValues(now);
-    asdrGain.gain.setValueAtTime(0.01, now);
-    asdrGain.gain.exponentialRampToValueAtTime(1, now + attackVal);
-    asdrGain.gain.exponentialRampToValueAtTime(sustainVal, now + attackVal + decayVal);
-  };
-
-  Synth.envelopeOff = function() {
-    now = audioCtx.currentTime;
-
-    asdrGain.gain.cancelScheduledValues(now);
-    asdrGain.gain.setValueAtTime(asdrGain.gain.value, now);
-    asdrGain.gain.linearRampToValueAtTime(0.00000001, now + releaseVal);
-  };
-
-  Synth.updateAttack = function() {
-    attackVal = Number(event.target.value) / 100;
-  };
-  Synth.updateSustain = function() {
-    sustainVal = Number(event.target.value) / 100;
-  };
-  Synth.updateDecay = function() {
-    decayVal = Number(event.target.value) / 100;
-  };
-  Synth.updateRelease = function() {
-    releaseVal = Number(event.target.value) / 100;
-  };
-
-  Synth.updateAmpMod = function() {
-    ampModInputVal = Number(event.target.value);
-    ampMod.frequency.value = ampModInputVal;
-  };
-
-  Synth.updateMasterVolume = function() {
-    master.gain.value = Number(event.target.value) / 100;
-  };
-
-  Synth.getSettings = function() {
-    return {
-      wave    : vco.type,
-      attack  : attackVal,
-      sustain : sustainVal,
-      decay   : decayVal,
-      release : releaseVal,
-      ampMod  : ampModInputVal
-    }
-  }
-
-  return Synth;
 })();
-
-window.onload = function() {
-  var synth = new Synth();
-  var saveBtn = document.getElementById('saveBtn');
-
-  saveBtn.addEventListener('click', function() {
-    console.log(Synth.getSettings());
-  });
-};

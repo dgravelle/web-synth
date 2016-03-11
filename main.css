@@ -4,10 +4,99 @@
 
 html {
   font-family: 'Helvetica', sans;
+  background: #F9F9F9;
+  background-repeat: no-repeat;
 }
 
-body {
-  background-color: #efefef;
+div#synthControls {
+  margin: 0 auto;
+  height: 200px;
+  display: block;
+  position: relative;
+  width: 533px;
+}
+
+div#oscType input[name="osc-type"] {
+  margin-right: 8px;
+  margin-bottom: 21px;
+}
+
+div#asdr {
+  border: 1px solid #ddd;
+  display: block;
+}
+
+div#synthControls div.panel {
+  padding: 8px;
+  padding-bottom: 8px;
+}
+
+div#synthControls div.panel:not(#oscType) .form-group  {
+  text-align: center;
+}
+
+div#synthControls div.panel {
+  height: 100%;
+  padding: 7px;
+  border: 2px solid #ccc;
+  border-left: none;
+  margin: 0;
+  position: relative;
+  display: inline-block;
+  float: left;
+  background: #ddd;
+  color: white;
+}
+
+div#synthControls div.panel:first-child {
+  border-left: 2px solid #ccc;
+}
+
+input[type=range]{
+  -webkit-appearance: slider-vertical;
+  width: 56px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  color: #555;
+}
+
+#asdr .form-group {
+  display: inline-block;
+}
+
+#synthControls div.panel label div.form-group {
+  text-align: center;
+}
+
+/* Keyboard styles */
+
+#keyboard {
+  position: relative;
+  margin: 16px auto;
+  width: 529px;
+  height: 220px;
+}
+
+#Dsharp, #Gsharp, #Asharp  {
+  margin-left: 6%;
+}
+
+#Fsharp {
+  margin-left: 21%;
+}
+
+.black-key:active {
+  background: #333;
+}
+.white-key:active {
+  background: #eee;
 }
 
 .white-key {
@@ -31,105 +120,15 @@ body {
   left: 10.5%;
 }
 
-
 .white-keys {
-    position: absolute;
-    width: 100%;
-    z-index: 0;
-    float: left;
-    height: 220px;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+  float: left;
+  height: 220px;
 }
 
 .black-keys {
-    width: 100%;
-    z-index: 2;
-}
-
-.black-key:active {
-  background: #333;
-}
-.white-key:active {
-  background: #eee;
-}
-
-#Dsharp, #Gsharp, #Asharp  {
-    margin-left: 6%;
-}
-
-#Fsharp {
-    margin-left: 21%;
-}
-
-#keyboard {
-    position: relative;
-    margin: 16px auto;
-    width: 529px;
-    height: 220px;
-}
-
-section#oscType input[name="osc-type"] {
-  margin-right: 8px;
-  margin-bottom: 21px;
-}
-
-section#asdr {
-    border: 1px solid #ddd;
-    display: block;
-}
-
-section#synthControls {
-  margin: 0 auto;
-  height: 200px;
-  display: block;
-  position: relative;
-  width: 533px;
-}
-
-section#synthControls section {
-    padding: 8px;
-    padding-bottom: 8px;
-}
-
-section#synthControls section:not(#oscType) .form-group  {
-    text-align: center;
-}
-
-section#synthControls section {
-    height: 100%;
-    padding: 7px;
-    border: 2px solid #ccc;
-    border-left: none;
-    margin: 0;
-    position: relative;
-    display: inline-block;
-    float: left;
-    background: #ddd;
-    color: white;
-}
-
-section#synthControls section:first-child {
-    border-left: 2px solid #ccc;
-}
-
-input[type=range]{
-  -webkit-appearance: slider-vertical;
-  width: 56px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.form-group {
-    position: relative;
-}
-
-.form-group label {
-    color: #555;
-}
-
-#asdr .form-group {
-    display: inline-block;
-}
-
-#synthControls section label div.form-group {
-    text-align: center;
+  width: 100%;
+  z-index: 2;
 }

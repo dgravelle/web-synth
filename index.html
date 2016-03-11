@@ -7,10 +7,8 @@
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
-
-  <header></header>
-  <section id="synthControls">
-   <section id="oscType">
+  <div id="synthControls">
+   <div id="oscType" class="panel">
     <div class="form-group">
       <label for="sine">
         <input name="osc-type" id="sine" type="radio" checked/>Sine
@@ -31,8 +29,8 @@
         <input name="osc-type" id="triangle" type="radio" />Triangle
       </label>
     </div>
-   </section>
-   <section id="asdr">
+   </div>
+   <div id="asdr" class="panel">
     <div class="form-group">
       <input id="attack" type="range" name="asdr" orient="vertical" value="100"/>
       <label for="attack">Attack</label>
@@ -49,21 +47,21 @@
       <input id="release" type="range" name="asdr" orient="vertical" value="100"/>
       <label for="release">Release</label>
     </div>
-   </section>
-   <section id="modulation">
+   </div>
+   <div id="modulation" class="panel">
      <div class="form-group">
        <input id="ampMod" type="range" name="modulation" orient="vertical" value="1" min="1" max="20"/>
        <label for="ampMod">Amp<br>mod</label>
      </div>
-   </section>
-   <section id="master">
+   </div>
+   <div id="master" class="panel">
      <div class="form-group">
        <input id="masterVolume" type="range" name="modulation" orient="vertical" value="100"/>
        <label for="masterVolume">Master<br>Volume</label>
      </div>
-   </section>
-  </section>
-  <section id="keyboard">
+   </div>
+  </div>
+  <div id="keyboard">
     <div class="white-keys">
       <span id="C" class="white-key" value="261.6"></span>
       <span id="D" class="white-key" value="293.7"></span>
@@ -78,12 +76,9 @@
       <span id="Dsharp" class="black-key" value="311.1"></span>
       <span id="Fsharp" class="black-key" value="370"></span>
       <span id="Gsharp" class="black-key" value="415.3"></span>
-      <span id="Asharp" class="black-key" value="466.2"></div>
+      <span id="Asharp" class="black-key" value="466.2"></span>
     </div>
-  </section>
-  <section id="saveSettings">
-    <button id="saveBtn" class="btn btn--save">Save Settings</button>
-  </section>
+  </div>
   <script src="synthSetup.js"></script>
 </body>
 </html>
